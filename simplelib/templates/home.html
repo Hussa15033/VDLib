@@ -1,4 +1,7 @@
 {% extends "base.html" %}
 {% block body_content %}
-    This is the home page
+    <div class="jumbotron">
+        <h2>Welcome to VDLib, your personal library!</h2>
+        <p class="lead">To get started, <a href="{% url 'register' %}">register</a> an account with us today, or <a href="{% url 'login' %}">log in</a> if you're a returning user.</p>
+    </div>
 {% endblock body_content %}
