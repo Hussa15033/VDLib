@@ -31,6 +31,10 @@ class VDLibLoginView(LoginView):
 	next_page = '/library'
 
 def register(request):
+	if request.user is not None and request.user.is_authenticated:
+		# Redirect if we're already logged in
+		return redirect('library')
+
 	if request.method == 'GET':
 		form = RegisterForm()
 		return render(request, 'register.html', {'form': form})
