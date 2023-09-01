@@ -67,9 +67,9 @@ class Loan(models.Model):
 	book = models.ForeignKey(Book, on_delete=models.PROTECT)
 
 	# The date/time the book was taken out
-	taken = models.DateTimeField(auto_now=False, auto_now_add=True)
+	taken = models.DateField(auto_now=False, auto_now_add=True)
 
-	due_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True)
+	due_date = models.DateField(auto_now=False, auto_now_add=False)
 
 	class Meta:
 		ordering = ['due_date']
