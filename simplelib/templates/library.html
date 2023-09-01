@@ -2,7 +2,15 @@
 {% block body_content %}
     <div class="container mt-3">
         <div class="jumbotron mt-2 p-3 rounded">
-            Filtering
+            <form method="GET">
+                <label>Filter by</label>
+                <select name="filter">
+                    {% for filter_value, filter in filters.items %}
+                        <option value="{{ filter_value }}">{{ filter }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Filter!" />
+            </form>
         </div>
         <h2>Viewing all books</h2>
 

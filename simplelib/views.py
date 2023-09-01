@@ -1,9 +1,12 @@
+from datetime import date
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, LoginForm, LoanForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.views import LoginView, LogoutView
+from django.utils.timezone import make_aware
 
 from .models import Book, Loan
 
@@ -29,7 +32,6 @@ def register(request):
 		form = RegisterForm()
 		return render(request, 'register.html', {'form': form})
 	elif request.method == 'POST':
-		print("WORKING")
 		form = RegisterForm(request.POST)
 		# print(form.errors)
 		if form.is_valid():
@@ -43,7 +45,25 @@ def register(request):
 
 
 def library(request):
-	return render(request, 'library.html', {'books': Book.objects.all()})
+	filters = {
+		'': 'All',
+		'available': 'Available',
+		'onloan': 'On loan',
+		'duetoday': 'Due today'
+	}
+
+	showing_books = Book.objects.all()
+	if request.method == 'GET':
+		filter = request.GET.get('filter')
+		if filter is not None:
+			if filter == 'available':
+				showing_books = Book.objects.filter(loan__isnull=True)
+			elif filter == 'onloan':
+				showing_books = Book.objects.filter(loan__isnull=False)
+			elif filter == 'duetoday':
+				showing_books = Book.objects.filter(loan__due_date__exact=date.today())
+
+	return render(request, 'library.html', {'books': showing_books, 'filters': filters})
 
 def book_view(request, book_id):
 	try:
