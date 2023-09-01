@@ -22,5 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
     path('register/', views.register),
-    path('library/', views.library, name='library')
+    path('library/', views.library, name='library'),
+    path('login/', views.VDLibLoginView.as_view(), name='login'),
+    path('logout/', views.logout_view)
 ]

@@ -1,9 +1,22 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.views import LoginView, LogoutView
 # Create your views here.
 def home(request):
 	return render(request, 'index.html')
+
+def logout_view(request):
+	# Logout the user and redirect them to login page
+	logout(request)
+	return redirect('login')
+class VDLibLoginView(LoginView):
+	redirect_authenticated_user = True
+
+	template_name = 'login.html'
+
+	# Page to redirect to on successful login, or if already logged in
+	next_page = '/library'
 
 def register(request):
 	if request.method == 'GET':
