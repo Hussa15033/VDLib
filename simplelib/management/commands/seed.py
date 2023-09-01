@@ -1,9 +1,12 @@
+import datetime
+
 from django.core.management.base import BaseCommand
 import faker
 import random
 
-from simplelib.models import User, Book
-
+from simplelib.models import User, Book, Loan
+import random
+from datetime import date
 
 class Command(BaseCommand):
 	def __init__(self):
@@ -32,6 +35,28 @@ class Command(BaseCommand):
 				image_url=self.faker.image_url(height=480, width=300),
 				title=" ".join(self.faker.words(nb=random.randint(1, 6))),
 				description=self.faker.text()
+			)
+
+
+		# Create loans at random
+		print("Seeding loans..")
+		for i in range(20):
+			# Select a book that is not being loaned, at random
+			book = Book.objects.filter(loan__isnull=True).order_by('?').first()
+
+			# Select a user at random that is not borrowing a book
+			user = User.objects.filter(loan__isnull=True).order_by('?').first()
+
+			# Create due date some time in the near future, with a 20% probability of it being today
+			if random.random() < 0.2:
+				due_date = date.today()
+			else:
+				due_date = date.today() + datetime.timedelta(days=random.randint(1, 30))
+
+			Loan.objects.create(
+				borrower=user,
+				book=book,
+				due_date=due_date
 			)
 
 		print("Seeding complete.")

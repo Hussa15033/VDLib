@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 import faker
 import random
 
-from simplelib.models import User, Book
+from simplelib.models import User, Book, Loan
 
 
 class Command(BaseCommand):
@@ -11,6 +11,9 @@ class Command(BaseCommand):
 		self.faker = faker.Faker('en_GB')
 
 	def handle(self, *args, **options):
+		print("Deleting loans..")
+		Loan.objects.all().delete()
+
 		print("Deleting users..")
 		User.objects.all().delete()
 
