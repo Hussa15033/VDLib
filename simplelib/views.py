@@ -62,7 +62,7 @@ def book_view(request, book_id):
 				loan = Loan.objects.get(book=book)
 			except ObjectDoesNotExist:
 				loan = None
-				
+
 			if loan is None:
 
 				# The user entered a correct date, create a new Loan for them

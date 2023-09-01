@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -35,6 +37,13 @@ class Book(models.Model):
 			return None
 		else:
 			return loan.due_date
+
+	def due_today(self):
+		due_date = self.due_date()
+		if due_date is None:
+			return
+
+		return due_date == date.today()
 
 
 

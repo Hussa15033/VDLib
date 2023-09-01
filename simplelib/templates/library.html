@@ -14,12 +14,30 @@
                     <div class="col-md-3 d-flex p-1">
                         <div class="card card-deck m-1">
                           <img src="{{ book.image_url }}" class="card-img-top" alt="{{ book.image_url }}">
-                          <div class="card-body">
-                            <h5 class="card-title">{{ book.title }}</h5>
-                            <p class="card-text">{{ book.description }}</p>
-                            <a href="{% url 'book_view' book_id=book.id %}" class="btn btn-primary">View book</a>
-                          </div>
-                        </div>
+                          <div class="card-body col d-flex flex-column">
+                            <h5 class="card-title d-flex">{{ book.title }}</h5>
+                            <p class="card-text d-flex">{{ book.description }}</p>
+                              <div class="d-flex flex-grow-1 flex-column mt-auto align-bottom">
+                                    <div class="mt-auto align-bottom">
+                                        <p>
+                                    {% if book.is_available %}
+                                        <span class="badge badge-success">Available</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">On Loan</span>
+                                    {% endif %}
+
+                                    {% if book.due_today %}
+                                        <span class="badge badge-info">Due today</span>
+                                    {% endif %}
+
+
+                                  </p>
+                                        <a href="{% url 'book_view' book_id=book.id %}" class="btn btn-primary mt-auto align-bottom w-100">View book</a></div>
+                                    </div>
+
+
+                              </div>
+                            </div>
                     </div>
                 {% endfor %}
             {% endif %}
