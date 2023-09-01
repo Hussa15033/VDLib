@@ -1,17 +1,21 @@
-<h2>Register an account</h2>
-<form method="POST">
-    {% csrf_token %}
-    {% for field in form %}
-	<div>
-		{% if field.errors %}
-		<p>
-			{% for error in field.errors %}
-			<li>{{ error }}</li>
-			{% endfor %}
-		</p>
-		{% endif %}
-	 	{{ field.label_tag }} {{ field }}
-	</div>
-	{% endfor %}
-    <input type="submit" value="Register" />
-</form>
+{% extends "base.html" %}
+{% block body_content %}
+
+    <h2>Register an account</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div>
+            {% if field.errors %}
+            <p>
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </p>
+            {% endif %}
+            {{ field.label_tag }} {{ field }}
+        </div>
+        {% endfor %}
+        <input type="submit" value="Register" />
+    </form>
+{% endblock %}
