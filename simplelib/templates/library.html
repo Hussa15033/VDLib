@@ -1,4 +1,28 @@
 {% extends "base.html" %}
 {% block body_content %}
-    This is the library page
+    <div class="container mt-3">
+        <div class="jumbotron mt-2 p-3 rounded">
+            Filtering
+        </div>
+        <h2>Viewing all books</h2>
+
+        <div class="row">
+            {% if books|length == 0 %}
+                <p>No books found</p>
+            {% else %}
+                {% for book in books %}
+                    <div class="col-md-3 d-flex p-1">
+                        <div class="card card-deck m-1">
+                          <img src="{{ book.image_url }}" class="card-img-top" alt="{{ book.image_url }}">
+                          <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">{{ book.description }}</p>
+                            <a href="#" class="btn btn-primary">View book</a>
+                          </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

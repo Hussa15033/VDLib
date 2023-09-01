@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.views import LoginView, LogoutView
+
+from .models import Book
+
+
 # Create your views here.
 def home(request):
 	return render(request, 'index.html')
@@ -37,5 +41,5 @@ def register(request):
 
 
 def library(request):
-	return render(request, 'library.html')
+	return render(request, 'library.html', {'books': Book.objects.all()})
 
