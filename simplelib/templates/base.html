@@ -13,8 +13,16 @@
         VDLib
     </a>
     <div class="navbar-collapse flex-grow-1 text-right" id="myNavbar">
+        <ul class="navbar-nav flex-nowrap">
+            <li class="nav-item">
+                <a href="{% url 'home' %}" class="nav-link m-2 menu-item">Home</a>
+            </li>
+        </ul>
         <ul class="navbar-nav ml-auto flex-nowrap">
             {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="{% url 'profile' %}" class="nav-link m-2 menu-item">Profile</a>
+                </li>
                 <li class="nav-item">
                     <a href="{% url 'library' %}" class="nav-link m-2 menu-item">View Library</a>
                 </li>

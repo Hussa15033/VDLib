@@ -46,7 +46,7 @@ def register(request):
 			# Invalid form, reload it and show the errors
 			return render(request, 'register.html', {'form': form})
 
-@login_required()
+@login_required
 def library(request):
 	filters = {
 		'': 'All',
@@ -68,7 +68,7 @@ def library(request):
 
 	return render(request, 'library.html', {'books': showing_books, 'filters': filters})
 
-@login_required()
+@login_required
 def book_view(request, book_id):
 	try:
 		book = Book.objects.get(id=book_id)
@@ -81,7 +81,8 @@ def book_view(request, book_id):
 	if request.method == 'POST':
 		form = LoanForm(request.POST)
 		if form.is_valid():
-			# Check the book has not been loaned already, i.e prevent user from refreshing
+			# Check the book has not been loaned already, i.e prevent user from refreshing, or attempting
+			# to get a loaned book
 			try:
 				loan = Loan.objects.get(book=book)
 			except ObjectDoesNotExist:
@@ -97,3 +98,21 @@ def book_view(request, book_id):
 				)
 
 	return render(request, 'book.html', {'book': book, 'form': form})
+
+@login_required
+def profile(request):
+	if request.method == 'POST':
+		# Id of the book to return
+		return_id = request.POST.get('book_return_id')
+
+		if return_id.isdigit():
+			try:
+				loan_to_cancel = Loan.objects.get(borrower=request.user, book=return_id)
+				loan_to_cancel.delete()
+			except ObjectDoesNotExist:
+				# If object does not exist, usually a refresh occurred or malicious input, ignore
+				pass
+
+	# Must come after the book has been returned, to not include it in the borrowed books
+	borrowed_books = Book.objects.filter(loan__borrower=request.user)
+	return render(request, 'profile.html', {'borrowed_books': borrowed_books})

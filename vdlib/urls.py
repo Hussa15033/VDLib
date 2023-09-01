@@ -20,10 +20,11 @@ from simplelib import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home),
+    path('', views.home, name='home'),
     path('register/', views.register, name='register'),
     path('library/', views.library, name='library'),
     path('login/', views.VDLibLoginView.as_view(), name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('books/<int:book_id>', views.book_view, name='book_view')
+    path('books/<int:book_id>', views.book_view, name='book_view'),
+    path('profile/', views.profile, name='profile')
 ]

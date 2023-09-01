@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body_content %}
+    <div class="row">
+        <div class="container">
+            <div class="jumbotron">
+                <h2>Welcome, {{ user.first_name }} {{ user.last_name }}!</h2>
+                <p class="lead">Here you can view and return your borrowed books</p>
+            </div>
+            <div class="row">
+                <div class="p-3 container card text-center col-8">
+                    <h4 class="top-header p-2">Your loaned books</h4>
+                    {% if borrowed_books|length == 0 %}
+                        <p class="m-3">You do not have any outstanding book loans.</p>
+                    {% else %}
+                        {% for book in borrowed_books %}
+                            <div class="row">
+                                <div class="col-3 text-center">
+                                    <img class="md-book-cover" src="{{ book.image_url }}" alt="{{ book.title }}">
+                                </div>
+                                <div class="col-9 text-left">
+                                    <h5>{{ book.title }}</h5>
+                                    <p>{{ book.description }}</p>
+                                    <p>Due: {{ book.due_date }}</p>
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="book_return_id" value="{{ book.id }}" />
+                                        <button type="submit" class="btn btn-primary">I have returned this</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
