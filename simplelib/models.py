@@ -18,3 +18,34 @@ class User(AbstractUser):
 	first_name = models.CharField(max_length=30, blank=False)
 	last_name = models.CharField(max_length=30, blank=False)
 	email = models.EmailField(unique=True, blank=False)
+
+
+class Book(models.Model):
+	image_url = models.URLField(max_length=150)
+	title = models.CharField(max_length=80, unique=False)
+	description = models.CharField(max_length=200)
+
+
+# This class models an active loan
+class Loan(models.Model):
+	# Set on delete to models.PROTECT, incase trying to delete a book/user
+	# while it is currently in an active loan
+	borrower = models.ForeignKey(User, on_delete=models.PROTECT)
+	book = models.ForeignKey(Book, on_delete=models.PROTECT)
+
+	# The date/time the book was taken out
+	taken = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+	due_date = models.DateTimeField(auto_now=False, auto_now_add=False, null=True)
+
+	class Meta:
+		ordering = ['due_date']
+
+		# The following constraint means a user cannot take the same book out more than once
+		# as django does not allow multiple primary keys
+		constraints = [
+			models.UniqueConstraint(
+				fields = ['borrower', 'book'],
+				name='unique_book_borrower_loan'
+			)
+		]
