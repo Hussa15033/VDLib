@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from .forms import RegisterForm, LoginForm, LoanForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required
 from django.utils.timezone import make_aware
 
 from .models import Book, Loan
@@ -23,6 +24,8 @@ class VDLibLoginView(LoginView):
 	redirect_authenticated_user = True
 
 	template_name = 'login.html'
+
+
 
 	# Page to redirect to on successful login, or if already logged in
 	next_page = '/library'
@@ -43,7 +46,7 @@ def register(request):
 			# Invalid form, reload it and show the errors
 			return render(request, 'register.html', {'form': form})
 
-
+@login_required()
 def library(request):
 	filters = {
 		'': 'All',
@@ -65,6 +68,7 @@ def library(request):
 
 	return render(request, 'library.html', {'books': showing_books, 'filters': filters})
 
+@login_required()
 def book_view(request, book_id):
 	try:
 		book = Book.objects.get(id=book_id)
