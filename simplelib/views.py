@@ -14,7 +14,7 @@ from .models import Book, Loan
 
 # Create your views here.
 def home(request):
-	return render(request, 'index.html')
+	return render(request, 'home.html')
 
 def logout_view(request):
 	# Logout the user and redirect them to login page
