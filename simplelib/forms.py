@@ -16,9 +16,9 @@ class RegisterForm(UserCreationForm):
 class DateInput(forms.DateInput):
     input_type = 'date'
 class LoanForm(forms.Form):
-	due_date = forms.DateField(widget=DateInput())
+	due_date = forms.DateField(widget=DateInput(), label='Return date:')
 
 	def clean(self):
 		super().clean()
-		if (self.cleaned_data.get('due_date') <= date.today()):
+		if self.cleaned_data.get('due_date') <= date.today():
 			self.add_error('due_date', 'Return date must be in the future')

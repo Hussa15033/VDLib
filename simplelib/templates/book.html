@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% block body_content %}
     <div class="container mt-3">
         <div class="jumbotron mt-2 p-3 rounded">
@@ -19,18 +20,19 @@
                          <form method="POST">
                          {% csrf_token %}
                             {% for field in form %}
-                            <div>
-                                {% if field.errors %}
-                                <p>
-                                    {% for error in field.errors %}
-                                    <li>{{ error }}</li>
-                                    {% endfor %}
-                                </p>
-                                {% endif %}
-                                {{ field.label_tag }} {{ field }}
-                            </div>
-                            {% endfor %}
-                         <input type="submit" value="Borrow!" />
+                            <div class="mb-3">
+                                 <div class="text-left">
+                                     {{ field.label_tag }}
+                                 </div>
+                                {% render_field field class='form-control' %}
+                                 {% if field.errors %}
+                                     <div class="text-danger">
+                                        {{ field.errors }}
+                                     </div>
+                                 {% endif %}
+                             </div>
+                        {% endfor %}
+                             <button type="submit" class="btn btn-primary">Borrow!</button>
                          </form>
                      {% else %}
                          <div class="alert alert-warning text-danger">
