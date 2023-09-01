@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block body_content %}
+    <div class="container mt-3">
+        <div class="jumbotron mt-2 p-3 rounded">
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="{{ book.image_url }}" class="card-img-top" alt="{{ book.image_url }}">
+                </div>
+                 <div class="col-md-9">
+                     <h2>
+                         {{ book.title }}
+                     </h2>
+                     <p>
+                         {{ book.description }}
+                     </p>
+                     {% if book.is_available %}
+                         <h5>Want to loan this book?</h5>
+                         <form method="POST">
+                         {% csrf_token %}
+                            {% for field in form %}
+                            <div>
+                                {% if field.errors %}
+                                <p>
+                                    {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                    {% endfor %}
+                                </p>
+                                {% endif %}
+                                {{ field.label_tag }} {{ field }}
+                            </div>
+                            {% endfor %}
+                         <input type="submit" value="Borrow!" />
+                         </form>
+                     {% else %}
+                         <p class="text-danger">This book is not available to loan</p>
+                         <p class="text-danger">It will be available on: {{ book.due_date }}</p>
+                     {% endif %}
+                 </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

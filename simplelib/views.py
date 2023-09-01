@@ -1,9 +1,11 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, LoanForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.views import LoginView, LogoutView
 
-from .models import Book
+from .models import Book, Loan
 
 
 # Create your views here.
@@ -43,3 +45,31 @@ def register(request):
 def library(request):
 	return render(request, 'library.html', {'books': Book.objects.all()})
 
+def book_view(request, book_id):
+	try:
+		book = Book.objects.get(id=book_id)
+	except ObjectDoesNotExist:
+		raise Http404
+
+	if request.method == 'GET':
+		form = LoanForm()
+
+	if request.method == 'POST':
+		form = LoanForm(request.POST)
+		if form.is_valid():
+			# Check the book has not been loaned already, i.e prevent user from refreshing
+			try:
+				loan = Loan.objects.get(book=book)
+			except ObjectDoesNotExist:
+				loan = None
+				
+			if loan is None:
+
+				# The user entered a correct date, create a new Loan for them
+				Loan.objects.create(
+					borrower=request.user,
+					book=book,
+					due_date=form.cleaned_data.get('due_date')
+				)
+
+	return render(request, 'book.html', {'book': book, 'form': form})

@@ -25,6 +25,18 @@ class Book(models.Model):
 	title = models.CharField(max_length=80, unique=False)
 	description = models.CharField(max_length=200)
 
+	def is_available(self):
+		# Returns a boolean of if this book is available or not
+		return Loan.objects.filter(book=self).count() == 0
+
+	def due_date(self):
+		loan = Loan.objects.get(book=self)
+		if loan is None:
+			return None
+		else:
+			return loan.due_date
+
+
 
 # This class models an active loan
 class Loan(models.Model):
