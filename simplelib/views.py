@@ -56,6 +56,7 @@ def library(request):
 	}
 
 	showing_books = Book.objects.all()
+	filter = None
 	if request.method == 'GET':
 		filter = request.GET.get('filter')
 		if filter is not None:
@@ -66,7 +67,7 @@ def library(request):
 			elif filter == 'duetoday':
 				showing_books = Book.objects.filter(loan__due_date__exact=date.today())
 
-	return render(request, 'library.html', {'books': showing_books, 'filters': filters})
+	return render(request, 'library.html', {'books': showing_books, 'filters': filters, 'current_filter': filter})
 
 @login_required
 def book_view(request, book_id):

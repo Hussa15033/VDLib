@@ -2,17 +2,20 @@
 {% block body_content %}
     <div class="container mt-3">
         <div class="jumbotron mt-2 p-3 rounded">
-            <form method="GET">
-                <label>Filter by</label>
-                <select name="filter">
+            <form method="GET" class="form-inline">
+                <label>Filter by&nbsp;</label>
+                <select name="filter" class="form-control">
                     {% for filter_value, filter in filters.items %}
-                        <option value="{{ filter_value }}">{{ filter }}</option>
+                        <option value="{{ filter_value }}"
+                                {% if current_filter == filter_value %} %}
+                                    selected
+                                {% endif %}>{{ filter }}</option>
                     {% endfor %}
-                </select>
-                <input type="submit" value="Filter!" />
+                </select>&nbsp;
+                <button type="submit" class="btn btn-primary">Filter books</button>
             </form>
         </div>
-        <h2>Viewing all books</h2>
+        <h2>Library</h2>
 
         <div class="row">
             {% if books|length == 0 %}
