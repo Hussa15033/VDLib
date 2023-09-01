@@ -13,6 +13,7 @@
                      <p>
                          {{ book.description }}
                      </p>
+                 {{ book_is_available }}
                      {% if book.is_available %}
                          <h5>Want to loan this book?</h5>
                          <form method="POST">
@@ -32,8 +33,16 @@
                          <input type="submit" value="Borrow!" />
                          </form>
                      {% else %}
-                         <p class="text-danger">This book is not available to loan</p>
-                         <p class="text-danger">It will be available on: {{ book.due_date }}</p>
+                         <div class="alert alert-warning text-danger">
+                            <p>This book is not available to loan</p>
+                         <p>This book is currently being loaned by:</p>
+                             <ul>
+                                 <li>
+                                    {{ book.borrower.first_name }} {{ book.borrower.last_name }} (Email: {{ book.borrower.email }})
+                                 </li>
+                             </ul>
+                             <p>It will be available on {{ book.due_date }}</p>
+                         </div>
                      {% endif %}
                  </div>
             </div>

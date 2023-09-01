@@ -27,16 +27,21 @@ class Book(models.Model):
 	title = models.CharField(max_length=80, unique=False)
 	description = models.CharField(max_length=200)
 
+	def _get_loan(self):
+		if Loan.objects.filter(book=self).count() == 0:
+			return None
+		return Loan.objects.get(book=self)
+
 	def is_available(self):
 		# Returns a boolean of if this book is available or not
-		return Loan.objects.filter(book=self).count() == 0
+		return self._get_loan() is None
 
 	def due_date(self):
-		loan = Loan.objects.get(book=self)
+		loan = self._get_loan()
 		if loan is None:
 			return None
-		else:
-			return loan.due_date
+
+		return loan.due_date
 
 	def due_today(self):
 		due_date = self.due_date()
@@ -44,6 +49,13 @@ class Book(models.Model):
 			return
 
 		return due_date == date.today()
+
+	def borrower(self):
+		loan = self._get_loan()
+		if loan is None:
+			return None
+
+		return loan.borrower
 
 
 
