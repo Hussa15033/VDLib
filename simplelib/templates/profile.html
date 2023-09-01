@@ -19,7 +19,7 @@
                                 </div>
                                 <div class="col-9 text-left">
                                     <h5>{{ book.title }}</h5>
-                                    <p>{{ book.description }}</p>
+                                    <p>{{ book.short_description }}</p>
                                     <p>Due: {{ book.due_date }}</p>
                                     <form method="POST">
                                         {% csrf_token %}

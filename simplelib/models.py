@@ -43,6 +43,11 @@ class Book(models.Model):
 
 		return loan.due_date
 
+	def short_description(self):
+		if len(self.description) > 100:
+			return self.description[0:100] + "..."
+
+		return self.description
 	def due_today(self):
 		due_date = self.due_date()
 		if due_date is None:
