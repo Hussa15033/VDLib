@@ -19,7 +19,7 @@ def home(request):
 def logout_view(request):
 	# Logout the user and redirect them to login page
 	logout(request)
-	return redirect('login')
+	return redirect('home')
 class VDLibLoginView(LoginView):
 	redirect_authenticated_user = True
 

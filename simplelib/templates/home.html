@@ -2,6 +2,10 @@
 {% block body_content %}
     <div class="jumbotron">
         <h2>Welcome to VDLib, your personal library!</h2>
-        <p class="lead">To get started, <a href="{% url 'register' %}">register</a> an account with us today, or <a href="{% url 'login' %}">log in</a> if you're a returning user.</p>
+        {% if user.is_authenticated %}
+            <p class="lead">Visit the <a href="{% url 'library' %}">library</a> and pick your favourites from our modest selection of books</p>
+        {% else %}
+            <p class="lead">To get started, <a href="{% url 'register' %}">register</a> an account with us today, or <a href="{% url 'login' %}">log in</a> if you're a returning user.</p>
+        {% endif %}
     </div>
 {% endblock body_content %}
